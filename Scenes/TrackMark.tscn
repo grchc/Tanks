@@ -1,0 +1,11 @@
+[gd_scene format=3 uid="uid://grvlafoc1owj"]
+
+[ext_resource type="Script" uid="uid://farkjlow8ogn" path="res://Scripts/Tank/track_mark.gd" id="1_5cctt"]
+[ext_resource type="Texture2D" uid="uid://dovrwpdcsbvot" path="res://Sprites/MainTank/Track_Mark.png" id="2_jnebh"]
+
+[node name="TrackMark" type="Node2D" unique_id=2005782228]
+script = ExtResource("1_5cctt")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=931937902]
+rotation = 1.5707964
+texture = ExtResource("2_jnebh")

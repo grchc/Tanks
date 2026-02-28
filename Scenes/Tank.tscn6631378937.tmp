@@ -1,0 +1,105 @@
+[gd_scene format=3 uid="uid://047bclugwlmj"]
+
+[ext_resource type="Texture2D" uid="uid://umhq0yi1jj50" path="res://Sprites/MainTank/Track_Sprite_Sheet.png" id="2_bv1fj"]
+[ext_resource type="Script" uid="uid://butpt8rrupopv" path="res://Scripts/Tank/TankMovement.gd" id="2_eids8"]
+[ext_resource type="PackedScene" uid="uid://grvlafoc1owj" path="res://Scenes/TrackMark.tscn" id="2_t8147"]
+[ext_resource type="Texture2D" uid="uid://dio4tngtilrv0" path="res://Sprites/MainTank/Tank_Base.png" id="2_tv66d"]
+[ext_resource type="Texture2D" uid="uid://dli4fbi3mjnd" path="res://Sprites/MainTank/Turret.png" id="4_eids8"]
+[ext_resource type="Script" uid="uid://8ssntjjg24le" path="res://Scripts/Tank/track.gd" id="4_qhpjb"]
+[ext_resource type="Script" uid="uid://88e3yu331gmj" path="res://Scripts/Tank/turret.gd" id="6_nf4gg"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_4yt5b"]
+radius = 31.0
+height = 80.0
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_eids8"]
+atlas = ExtResource("2_bv1fj")
+region = Rect2(0, 0, 10, 30)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ms1bw"]
+atlas = ExtResource("2_bv1fj")
+region = Rect2(10, 0, 10, 30)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_4yt5b"]
+atlas = ExtResource("2_bv1fj")
+region = Rect2(20, 0, 10, 30)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_b420v"]
+atlas = ExtResource("2_bv1fj")
+region = Rect2(30, 0, 10, 30)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_adosd"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_eids8")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ms1bw")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_4yt5b")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_b420v")
+}],
+"loop": true,
+"name": &"move",
+"speed": 8.0
+}]
+
+[node name="Tank" type="CharacterBody2D" unique_id=1303356266]
+script = ExtResource("2_eids8")
+track_max_speed_forward = null
+track_max_speed_reverse = null
+track_acceleration = null
+braking_deceleration = null
+track_distance = null
+max_track_diff = null
+turn_response = null
+pivot_turn_speed = null
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1742312030]
+visible = false
+shape = SubResource("CapsuleShape2D_4yt5b")
+
+[node name="Tracks" type="Node2D" parent="." unique_id=815766223]
+
+[node name="RightTrack" type="AnimatedSprite2D" parent="Tracks" unique_id=1198080984]
+position = Vector2(-30, -1)
+scale = Vector2(2.7, 2.7)
+sprite_frames = SubResource("SpriteFrames_adosd")
+animation = &"move"
+frame = 3
+frame_progress = 0.1399193
+script = ExtResource("4_qhpjb")
+track_mark_scene = ExtResource("2_t8147")
+
+[node name="TrackPoint" type="Node2D" parent="Tracks/RightTrack" unique_id=229444771]
+position = Vector2(0, 0.37037036)
+scale = Vector2(0.37037036, 0.37037036)
+
+[node name="LeftTrack" type="AnimatedSprite2D" parent="Tracks" unique_id=699059596]
+position = Vector2(30, -1)
+scale = Vector2(2.7, 2.7)
+sprite_frames = SubResource("SpriteFrames_adosd")
+animation = &"move"
+frame = 3
+frame_progress = 0.1399193
+flip_h = true
+script = ExtResource("4_qhpjb")
+track_mark_scene = ExtResource("2_t8147")
+
+[node name="TrackPoint" type="Node2D" parent="Tracks/LeftTrack" unique_id=885561658]
+position = Vector2(0, 0.37037036)
+scale = Vector2(0.37037036, 0.37037036)
+
+[node name="Body" type="Sprite2D" parent="." unique_id=1165396634]
+texture = ExtResource("2_tv66d")
+
+[node name="Turret" type="Node2D" parent="." unique_id=88521964]
+scale = Vector2(1.2, 1.2)
+script = ExtResource("6_nf4gg")
+
+[node name="Sprite2D" type="Sprite2D" parent="Turret" unique_id=1532226316]
+texture = ExtResource("4_eids8")

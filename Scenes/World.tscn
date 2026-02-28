@@ -1,0 +1,88 @@
+[gd_scene format=3 uid="uid://cngdou76smopn"]
+
+[ext_resource type="Script" uid="uid://c88g3hp6y3cgc" path="res://Scripts/world.gd" id="1_gjpho"]
+[ext_resource type="Texture2D" uid="uid://dwafahr7vdh3g" path="res://Sprites/Background/City.png" id="1_j0p05"]
+[ext_resource type="PackedScene" uid="uid://047bclugwlmj" path="res://Scenes/Tank.tscn" id="2_bcbcq"]
+[ext_resource type="Texture2D" uid="uid://dvt02xwbbaod5" path="res://Sprites/MainTank/Aim.png" id="4_p70al"]
+[ext_resource type="Script" uid="uid://de0rtxg2art3a" path="res://Scripts/crosshair.gd" id="5_y7y61"]
+[ext_resource type="Script" uid="uid://ntxiaicmswxb" path="res://Scripts/camera_rig.gd" id="6_y7y61"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_45d1s"]
+size = Vector2(568, 20)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_y7y61"]
+size = Vector2(124.752, 20)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_q2d71"]
+size = Vector2(392.00003, 26)
+
+[node name="World" type="Node2D" unique_id=2022687571]
+process_mode = 3
+script = ExtResource("1_gjpho")
+
+[node name="Background" type="Sprite2D" parent="." unique_id=114831926]
+z_index = -10
+z_as_relative = false
+texture_repeat = 2
+position = Vector2(765.00006, 435)
+scale = Vector2(1.731579, 2.0776315)
+texture = ExtResource("1_j0p05")
+
+[node name="TrackMarks" type="Node2D" parent="." unique_id=539108097]
+
+[node name="Tank" parent="." unique_id=1303356266 instance=ExtResource("2_bcbcq")]
+position = Vector2(765, 371)
+wall_friction = 0.05
+
+[node name="Crosshair" type="Node2D" parent="." unique_id=1760651807]
+script = ExtResource("5_y7y61")
+
+[node name="Sprite2D" type="Sprite2D" parent="Crosshair" unique_id=415003454]
+texture = ExtResource("4_p70al")
+
+[node name="CameraRig" type="Node2D" parent="." unique_id=948230716]
+script = ExtResource("6_y7y61")
+
+[node name="Camera2D" type="Camera2D" parent="CameraRig" unique_id=254584626]
+
+[node name="Obstacles" type="Node2D" parent="." unique_id=28377787]
+position = Vector2(577, -71)
+
+[node name="Wall1" type="StaticBody2D" parent="Obstacles" unique_id=1319629812]
+position = Vector2(140, -61)
+
+[node name="Wall1Coll" type="CollisionShape2D" parent="Obstacles/Wall1" unique_id=1541500667]
+position = Vector2(8, 0)
+shape = SubResource("RectangleShape2D_45d1s")
+
+[node name="Wall2" type="StaticBody2D" parent="Obstacles" unique_id=541983027]
+position = Vector2(459, -93)
+
+[node name="Wall2Coll" type="CollisionShape2D" parent="Obstacles/Wall2" unique_id=215026290]
+rotation = -0.7853982
+scale = Vector2(0.9999999, 0.9999999)
+shape = SubResource("RectangleShape2D_y7y61")
+
+[node name="Wall3" type="StaticBody2D" parent="Obstacles" unique_id=1407763916]
+position = Vector2(492, -320)
+
+[node name="Wall3Coll" type="CollisionShape2D" parent="Obstacles/Wall3" unique_id=237816428]
+rotation = 1.5707964
+scale = Vector2(0.9999999, 0.9999999)
+shape = SubResource("RectangleShape2D_q2d71")
+
+[node name="Wall4" type="StaticBody2D" parent="Obstacles" unique_id=1152109311]
+position = Vector2(-174, -104)
+
+[node name="Wall4Coll" type="CollisionShape2D" parent="Obstacles/Wall4" unique_id=1539549370]
+rotation = 0.7853982
+scale = Vector2(0.9999999, 0.9999999)
+shape = SubResource("RectangleShape2D_y7y61")
+
+[node name="Wall5" type="StaticBody2D" parent="Obstacles" unique_id=406122008]
+position = Vector2(-213, -335)
+
+[node name="Wall3Coll" type="CollisionShape2D" parent="Obstacles/Wall5" unique_id=1851846926]
+rotation = 1.5707964
+scale = Vector2(0.9999999, 0.9999999)
+shape = SubResource("RectangleShape2D_q2d71")

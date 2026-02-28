@@ -1,0 +1,141 @@
+[gd_scene format=3 uid="uid://bcmlxpkjf0ued"]
+
+[ext_resource type="Script" uid="uid://bhv2rx0mcee48" path="res://Scripts/main_menu.gd" id="1_7vrkn"]
+[ext_resource type="Shader" uid="uid://dbeaq5l0of4k5" path="res://main_menu.gdshader" id="2_fu7sn"]
+[ext_resource type="Shader" uid="uid://cvdkssrj2e883" path="res://main_menu_vignette.gdshader" id="3_fu7sn"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_jix8l"]
+shader = ExtResource("2_fu7sn")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_glbon"]
+shader = ExtResource("3_fu7sn")
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_fu7sn"]
+bg_color = Color(0.09411765, 0.10980392, 0.13333334, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.21960784, 0.25882354, 0.30588236, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_jix8l"]
+bg_color = Color(0.047058824, 0.0627451, 0.078431375, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.21960784, 0.25882354, 0.30588236, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_glbon"]
+bg_color = Color(0.14509805, 0.17254902, 0.21176471, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.34509805, 0.4, 0.43137255, 1)
+
+[node name="MainMenu" type="Control" unique_id=155766470]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_7vrkn")
+
+[node name="Background" type="ColorRect" parent="." unique_id=1812356400]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.023529412, 0.02745098, 0.03137255, 1)
+
+[node name="ScanLines" type="ColorRect" parent="Background" unique_id=420097354]
+material = SubResource("ShaderMaterial_jix8l")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(1, 1, 1, 0)
+
+[node name="Vignette" type="ColorRect" parent="Background" unique_id=1326642335]
+material = SubResource("ShaderMaterial_glbon")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="CenterContainer" type="CenterContainer" parent="." unique_id=753064455]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="OuterPanel" type="VBoxContainer" parent="CenterContainer" unique_id=569559965]
+custom_minimum_size = Vector2(480, 0)
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="TopEdge" type="ColorRect" parent="CenterContainer/OuterPanel" unique_id=1831797403]
+custom_minimum_size = Vector2(0, 6)
+layout_mode = 2
+size_flags_vertical = 3
+color = Color(0.21960784, 0.25882354, 0.30588236, 1)
+
+[node name="PanelBody" type="VBoxContainer" parent="CenterContainer/OuterPanel" unique_id=205675721]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 20
+
+[node name="TitleLabel" type="Label" parent="CenterContainer/OuterPanel/PanelBody" unique_id=1068968438]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.7372549, 0.7921569, 0.8156863, 1)
+theme_override_font_sizes/font_size = 36
+text = "TANK GAME"
+horizontal_alignment = 1
+
+[node name="DivTop" type="ColorRect" parent="CenterContainer/OuterPanel/PanelBody" unique_id=989987793]
+custom_minimum_size = Vector2(0, 6)
+layout_mode = 2
+size_flags_vertical = 3
+color = Color(0.14509805, 0.17254902, 0.21176471, 1)
+
+[node name="DeployButton" type="Button" parent="CenterContainer/OuterPanel/PanelBody" unique_id=386627549]
+custom_minimum_size = Vector2(0, 44)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.7372549, 0.7921569, 0.8156863, 1)
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 30
+theme_override_styles/normal = SubResource("StyleBoxFlat_fu7sn")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_jix8l")
+theme_override_styles/hover = SubResource("StyleBoxFlat_glbon")
+text = "> DEPLOY"
+
+[node name="DivBot" type="ColorRect" parent="CenterContainer/OuterPanel/PanelBody" unique_id=654577916]
+custom_minimum_size = Vector2(0, 6)
+layout_mode = 2
+size_flags_vertical = 3
+color = Color(0.14509805, 0.17254902, 0.21176471, 1)
+
+[node name="VerseLabel" type="Label" parent="CenterContainer/OuterPanel/PanelBody" unique_id=2040747689]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.14509805, 0.17254902, 0.21176471, 1)
+theme_override_font_sizes/font_size = 18
+text = "In the grim darkness of the far future 
+there is only war"
+horizontal_alignment = 1
+autowrap_mode = 2
+
+[node name="BotEdge" type="ColorRect" parent="CenterContainer/OuterPanel/PanelBody" unique_id=1127074687]
+custom_minimum_size = Vector2(0, 6)
+layout_mode = 2
+size_flags_vertical = 3
+color = Color(0.21960784, 0.25882354, 0.30588236, 1)
