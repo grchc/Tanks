@@ -20,7 +20,9 @@ jobs:
           relative_project_path: ./
 
       - name: Copy build to workspace
-        run: cp -r /home/runner/.local/share/godot/builds/Tanks $GITHUB_WORKSPACE/builds/Tanks
+        run: |
+          mkdir -p $GITHUB_WORKSPACE/builds/Tanks
+          cp -r /home/runner/.local/share/godot/builds/Tanks/. $GITHUB_WORKSPACE/builds/Tanks
 
       - name: Upload to itch.io
         uses: KikimoraGames/itch-publish@v0.0.3
