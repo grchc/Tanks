@@ -4,9 +4,10 @@
 [ext_resource type="Script" uid="uid://butpt8rrupopv" path="res://Scripts/Tank/body.gd" id="2_eids8"]
 [ext_resource type="PackedScene" uid="uid://grvlafoc1owj" path="res://Scenes/TrackMark.tscn" id="2_t8147"]
 [ext_resource type="Texture2D" uid="uid://dio4tngtilrv0" path="res://Sprites/MainTank/Tank_Base.png" id="2_tv66d"]
-[ext_resource type="Texture2D" uid="uid://dli4fbi3mjnd" path="res://Sprites/MainTank/Turret.png" id="4_eids8"]
 [ext_resource type="Script" uid="uid://8ssntjjg24le" path="res://Scripts/Tank/track.gd" id="4_qhpjb"]
 [ext_resource type="Script" uid="uid://88e3yu331gmj" path="res://Scripts/Tank/turret.gd" id="6_nf4gg"]
+[ext_resource type="PackedScene" uid="uid://gfcab27kqhq0" path="res://Scenes/muzzle_flash.tscn" id="7_kvoy7"]
+[ext_resource type="Texture2D" uid="uid://ded3qw6tydk1i" path="res://Sprites/MainTank/Turret_animated.png" id="7_nf4gg"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_nf4gg"]
 size = Vector2(59, 74)
@@ -47,6 +48,54 @@ animations = [{
 "speed": 8.0
 }]
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_kvoy7"]
+atlas = ExtResource("7_nf4gg")
+region = Rect2(0, 0, 15, 33)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_abwyb"]
+atlas = ExtResource("7_nf4gg")
+region = Rect2(15, 0, 15, 33)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_d3564"]
+atlas = ExtResource("7_nf4gg")
+region = Rect2(30, 0, 15, 33)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_lmn0b"]
+atlas = ExtResource("7_nf4gg")
+region = Rect2(45, 0, 15, 33)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_u4g1s"]
+atlas = ExtResource("7_nf4gg")
+region = Rect2(60, 0, 15, 33)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_fd0hd"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_kvoy7")
+}],
+"loop": true,
+"name": &"idle",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_abwyb")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_d3564")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_lmn0b")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_u4g1s")
+}],
+"loop": false,
+"name": &"shoot",
+"speed": 5.0
+}]
+
 [node name="Tank" type="CharacterBody2D" unique_id=1303356266]
 script = ExtResource("2_eids8")
 
@@ -58,7 +107,7 @@ shape = SubResource("RectangleShape2D_nf4gg")
 
 [node name="RightTrack" type="AnimatedSprite2D" parent="Tracks" unique_id=1198080984]
 position = Vector2(-30, -1)
-scale = Vector2(2.7, 2.7)
+scale = Vector2(3, 3)
 sprite_frames = SubResource("SpriteFrames_adosd")
 animation = &"move"
 frame = 3
@@ -72,7 +121,7 @@ scale = Vector2(0.37037036, 0.37037036)
 
 [node name="LeftTrack" type="AnimatedSprite2D" parent="Tracks" unique_id=699059596]
 position = Vector2(30, -1)
-scale = Vector2(2.7, 2.7)
+scale = Vector2(3, 3)
 sprite_frames = SubResource("SpriteFrames_adosd")
 animation = &"move"
 frame = 3
@@ -89,8 +138,15 @@ scale = Vector2(0.37037036, 0.37037036)
 texture = ExtResource("2_tv66d")
 
 [node name="Turret" type="Node2D" parent="." unique_id=88521964]
-scale = Vector2(1.2, 1.2)
+scale = Vector2(3, 3)
 script = ExtResource("6_nf4gg")
+muzzle_flash_scene = ExtResource("7_kvoy7")
 
-[node name="Sprite2D" type="Sprite2D" parent="Turret" unique_id=1532226316]
-texture = ExtResource("4_eids8")
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="Turret" unique_id=1777150677]
+position = Vector2(-9.237064e-15, -8)
+rotation = 3.1415927
+sprite_frames = SubResource("SpriteFrames_fd0hd")
+animation = &"idle"
+
+[node name="MuzzlePoint" type="Node2D" parent="Turret" unique_id=588109385]
+position = Vector2(0, -21.666666)
