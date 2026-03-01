@@ -141,11 +141,14 @@ texture = ExtResource("2_tv66d")
 [node name="Turret" type="Node2D" parent="." unique_id=88521964]
 scale = Vector2(3, 3)
 script = ExtResource("6_nf4gg")
+max_angular_speed = 1.2
+angular_decel = 20.0
 muzzle_flash_scene = ExtResource("7_kvoy7")
 smoke_effect_scene = ExtResource("8_abwyb")
 shoot_cooldown = 1.5
-shake_strength = 250.0
+shake_strength = 100.0
 shake_directional_weight = 1.0
+recoil_impulse = 200.0
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="Turret" unique_id=1777150677]
 position = Vector2(-9.237064e-15, -8)

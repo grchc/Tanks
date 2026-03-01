@@ -13,12 +13,14 @@ extends Node2D
 @export var smoke_initial_speed: float = 80.0
 @export var shoot_cooldown: float = 0.5
 
-# --- Настройки шейка камеры (зависят от орудия) ---
 @export_group("Camera Shake")
-# Сила отдачи камеры в пикселях
 @export var shake_strength: float = 120.0
-# Доля отдачи строго назад (0 = только случайный шейк, 1 = только назад)
 @export var shake_directional_weight: float = 0.8
+
+@export_group("Recoil")
+# Сила импульса отдачи в единицах скорости гусениц.
+# При 0 — отдачи нет. При ~50–100 — заметный толчок. При >250 — сдвигает стоячий танк.
+@export var recoil_impulse: float = 60.0
 
 @onready var crosshair: Node2D = get_tree().current_scene.get_node("Crosshair")
 @onready var sprite: AnimatedSprite2D = $AnimatedSprite2D
@@ -73,6 +75,7 @@ func _shoot() -> void:
 	_spawn_muzzle_flash()
 	_spawn_smoke()
 	_apply_camera_shake()
+	_apply_recoil()
 
 	get_tree().create_timer(shoot_cooldown).timeout.connect(func(): _can_shoot = true)
 
@@ -105,15 +108,25 @@ func _apply_camera_shake() -> void:
 		push_warning("Turret: CameraRig не найден!")
 		return
 
-	# Направление отдачи — противоположное направлению ствола
 	var muzzle_dir: Vector2 = Vector2.UP.rotated(muzzle_point.global_rotation)
 	var recoil_dir: Vector2 = -muzzle_dir
-
-	# Случайная поперечная составляющая для органичности
 	var random_dir: Vector2 = Vector2(randf_range(-1.0, 1.0), randf_range(-1.0, 1.0)).normalized()
 	var shake_dir: Vector2 = recoil_dir.lerp(random_dir, 1.0 - shake_directional_weight).normalized()
 
 	camera_rig.apply_shake(shake_dir, shake_strength)
+
+func _apply_recoil() -> void:
+	if recoil_impulse <= 0.0:
+		return
+
+	var body := get_parent()
+	if not body.has_method("apply_recoil"):
+		push_warning("Turret: тело танка не имеет метода apply_recoil!")
+		return
+
+	# Направление выстрела — вперёд из дула в мировых координатах
+	var shot_dir: Vector2 = Vector2.UP.rotated(muzzle_point.global_rotation)
+	body.apply_recoil(shot_dir, recoil_impulse)
 
 func _on_sprite_animation_finished() -> void:
 	if sprite.animation == "shoot":

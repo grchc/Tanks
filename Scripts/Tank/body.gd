@@ -20,7 +20,6 @@ var right_track_speed: float = 0.0
 var current_linear_speed: float = 0.0
 var current_angular_speed: float = 0.0
 
-# test
 func _physics_process(delta: float) -> void:
 	_read_input()
 	_handle_tracks(delta)
@@ -83,11 +82,37 @@ func _apply_tank_physics(delta: float) -> void:
 	velocity = Vector2.UP.rotated(rotation) * current_linear_speed
 
 
+# Вызывается из turret.gd при выстреле.
+# shot_global_dir — нормализованное направление выстрела в мировых координатах.
+# impulse — сила импульса (настраивается в башне).
+func apply_recoil(shot_global_dir: Vector2, impulse: float) -> void:
+	var tank_forward := Vector2.UP.rotated(rotation)
+
+	# Проекция направления выстрела на ось танка.
+	# +1 = выстрел вперёд (танк тормозит), -1 = выстрел назад (танк ускоряется вперёд).
+	# ~0 = выстрел перпендикулярно — игнорируем.
+	var alignment := shot_global_dir.dot(tank_forward)
+
+	# Порог перпендикулярности: если |alignment| < threshold — не применяем импульс.
+	const PERPENDICULAR_THRESHOLD := 0.3
+	if abs(alignment) < PERPENDICULAR_THRESHOLD:
+		return
+
+	# Отдача действует против направления выстрела вдоль оси танка.
+	# alignment > 0: выстрел вперёд → импульс назад → уменьшаем скорость гусениц.
+	# alignment < 0: выстрел назад  → импульс вперёд → увеличиваем скорость гусениц.
+	var speed_delta := -alignment * impulse
+
+	# Применяем к обеим гусеницам одинаково (чисто линейный импульс, без разворота).
+	# Намеренно НЕ clamp'им — импульс может кратковременно превысить track_max_speed.
+	left_track_speed  += speed_delta
+	right_track_speed += speed_delta
+
+
 func _handle_wall_collision(_delta: float) -> void:
 	if get_slide_collision_count() == 0:
 		return
 
-	# Собираем суммарную нормаль всех контактов
 	var combined_normal := Vector2.ZERO
 	for i in get_slide_collision_count():
 		var col := get_slide_collision(i)
@@ -99,53 +124,30 @@ func _handle_wall_collision(_delta: float) -> void:
 	combined_normal = combined_normal.normalized()
 	var tank_forward := Vector2.UP.rotated(rotation)
 
-	# Насколько танк движется «в» стену (отрицательное значение = едем в стену)
 	var dot_into_wall := tank_forward.dot(-combined_normal)
 
-	# Если танк не движется в стену — трение не применяем
-	# (например, едем вдоль стены или отъезжаем от неё)
 	if dot_into_wall <= 0.0:
 		return
 
-	# dot_into_wall ∈ (0, 1]:
-	#   ~0  — движемся почти параллельно стене (скользим) — почти нет торможения
-	#   ~1  — движемся перпендикулярно (прямо в лоб) — максимальное торможение
 	var friction_strength := dot_into_wall * wall_friction
 
-	# Проецируем скорость гусениц на направление «вдоль стены»
-	# Компонента вдоль стены — единственная допустимая при упоре в неё
 	var wall_tangent := Vector2(-combined_normal.y, combined_normal.x)
 	var tank_right := Vector2.RIGHT.rotated(rotation)
 
-	# Знаковая проекция правой оси танка на касательную стены
-	# Нужна чтобы понять, насколько «вперёд» по гусенице соответствует движению вдоль стены
 	var right_along_wall := tank_right.dot(wall_tangent)
 	var forward_along_wall := tank_forward.dot(wall_tangent)
 
-	# Скалярная скорость вдоль стены для каждой гусеницы
-	# left track point = center - right*(track_distance/2)
-	# right track point = center + right*(track_distance/2)
-	# Но нам достаточно знать, какая доля скорости допустима
 	var left_along  := left_track_speed * forward_along_wall
 	var right_along := right_track_speed * forward_along_wall
 
-	# Тормозим гусеницы пропорционально силе трения:
-	# оставляем только допустимую (вдоль стены) часть, убираем forbidden часть
-	# new_speed = current_speed * (1 - friction_strength) + allowed_component * friction_strength
-	# Упрощённо: замедляем линейную скорость, сохраняя угловую (разворот вдоль стены не блокируем)
 	var avg_speed := (left_track_speed + right_track_speed) * 0.5
-	var diff_speed := (right_track_speed - left_track_speed) * 0.5  # half-difference для поворота
+	var diff_speed := (right_track_speed - left_track_speed) * 0.5
 
-	# Тормозим только среднюю (линейную) часть, пропорционально углу удара
 	var braked_avg := avg_speed * (1.0 - friction_strength)
 
-	# Угловую часть (разворот) оставляем — танк может разворачиваться у стены
 	left_track_speed  = braked_avg - diff_speed
 	right_track_speed = braked_avg + diff_speed
 
-	# Гарантируем, что velocity после корректировки не толкает в стену
-	# CharacterBody2D уже обнулил компоненту velocity в нормаль через move_and_slide,
-	# но пересчитываем на основе обновлённых скоростей гусениц
 	current_linear_speed = (left_track_speed + right_track_speed) * 0.5
 	velocity = Vector2.UP.rotated(rotation) * current_linear_speed
 
