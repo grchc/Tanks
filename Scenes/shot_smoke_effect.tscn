@@ -1,0 +1,86 @@
+[gd_scene format=3 uid="uid://uvgp87fm7bdr"]
+
+[ext_resource type="Script" uid="uid://bicjq6r5vjkpo" path="res://shot_smoke_effect.gd" id="1_i03hr"]
+[ext_resource type="Texture2D" uid="uid://dw3mdwa234mfp" path="res://Sprites/MainTank/shot_smoke_anim1.png" id="2_i03hr"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_vvcr2"]
+atlas = ExtResource("2_i03hr")
+region = Rect2(0, 0, 70, 96)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ci6o4"]
+atlas = ExtResource("2_i03hr")
+region = Rect2(70, 0, 70, 96)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_wuo8y"]
+atlas = ExtResource("2_i03hr")
+region = Rect2(140, 0, 70, 96)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_s7yil"]
+atlas = ExtResource("2_i03hr")
+region = Rect2(210, 0, 70, 96)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_rpplt"]
+atlas = ExtResource("2_i03hr")
+region = Rect2(280, 0, 70, 96)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_r5kd2"]
+atlas = ExtResource("2_i03hr")
+region = Rect2(350, 0, 70, 96)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_avk1a"]
+atlas = ExtResource("2_i03hr")
+region = Rect2(420, 0, 70, 96)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_4bg4c"]
+atlas = ExtResource("2_i03hr")
+region = Rect2(490, 0, 70, 96)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_fmpia"]
+atlas = ExtResource("2_i03hr")
+region = Rect2(560, 0, 70, 96)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_febtt"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_vvcr2")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ci6o4")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_wuo8y")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_s7yil")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_rpplt")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_r5kd2")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_avk1a")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_4bg4c")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_fmpia")
+}],
+"loop": true,
+"name": &"smoke",
+"speed": 10.0
+}]
+
+[node name="ShotSmokeEffect" type="Node2D" unique_id=2134303623]
+scale = Vector2(1.5, 1.5)
+script = ExtResource("1_i03hr")
+final_alpha = 0.0
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1571904878]
+position = Vector2(7.999998, -61)
+rotation = -0.5235988
+sprite_frames = SubResource("SpriteFrames_febtt")
+animation = &"smoke"

@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://d3sny5k2enk25"
-path="res://.godot/imported/dirt.webp-800749c0f15408f2ad294b7c5b72ca92.ctex"
+uid="uid://dw3mdwa234mfp"
+path="res://.godot/imported/shot_smoke_anim1.png-6e3b7e36fe6f690f1d87bcc5f0982ccc.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Sprites/Background/dirt.webp"
-dest_files=["res://.godot/imported/dirt.webp-800749c0f15408f2ad294b7c5b72ca92.ctex"]
+source_file="res://Sprites/MainTank/shot_smoke_anim1.png"
+dest_files=["res://.godot/imported/shot_smoke_anim1.png-6e3b7e36fe6f690f1d87bcc5f0982ccc.ctex"]
 
 [params]
 

@@ -8,9 +8,17 @@ extends Node2D
 @export var kd: float = 2.0
 
 @export var muzzle_flash_scene: PackedScene
+@export var smoke_effect_scene: PackedScene
 
-# Кулдаун между выстрелами (в секундах)
-@export var shoot_cooldown: float = 1.5
+@export var smoke_initial_speed: float = 80.0
+@export var shoot_cooldown: float = 0.5
+
+# --- Настройки шейка камеры (зависят от орудия) ---
+@export_group("Camera Shake")
+# Сила отдачи камеры в пикселях
+@export var shake_strength: float = 120.0
+# Доля отдачи строго назад (0 = только случайный шейк, 1 = только назад)
+@export var shake_directional_weight: float = 0.8
 
 @onready var crosshair: Node2D = get_tree().current_scene.get_node("Crosshair")
 @onready var sprite: AnimatedSprite2D = $AnimatedSprite2D
@@ -37,10 +45,8 @@ func _rotate_toward_crosshair(delta: float) -> void:
 		return
 
 	var target_global_angle: float = (crosshair.global_position - global_position).angle() + PI / 2
-
 	var hull_angle: float = get_parent().global_rotation
 	var target_relative_angle: float = wrapf(target_global_angle - hull_angle, -PI, PI)
-
 	var angle_diff: float = wrapf(target_relative_angle - rotation, -PI, PI)
 
 	var desired_speed: float = clamp(
@@ -63,14 +69,11 @@ func _shoot() -> void:
 		return
 
 	_can_shoot = false
-
-	# Анимируем башню
 	sprite.play("shoot")
-
-	# Спавним вспышку в мировом пространстве
 	_spawn_muzzle_flash()
+	_spawn_smoke()
+	_apply_camera_shake()
 
-	# Кулдаун через таймер
 	get_tree().create_timer(shoot_cooldown).timeout.connect(func(): _can_shoot = true)
 
 func _spawn_muzzle_flash() -> void:
@@ -79,13 +82,38 @@ func _spawn_muzzle_flash() -> void:
 		return
 
 	var flash: Node2D = muzzle_flash_scene.instantiate()
-
-	# Добавляем в корень сцены — вспышка НЕ будет двигаться вместе с танком
 	get_tree().current_scene.add_child(flash)
-
-	# Берём мировую позицию и поворот дула в момент выстрела
 	flash.global_position = muzzle_point.global_position
 	flash.global_rotation = muzzle_point.global_rotation
+
+func _spawn_smoke() -> void:
+	if smoke_effect_scene == null:
+		push_warning("Turret: smoke_effect_scene не назначен!")
+		return
+
+	var smoke: Node2D = smoke_effect_scene.instantiate()
+	get_tree().current_scene.add_child(smoke)
+	smoke.global_position = muzzle_point.global_position
+	smoke.global_rotation = muzzle_point.global_rotation
+
+	var muzzle_dir: Vector2 = Vector2.UP.rotated(muzzle_point.global_rotation)
+	smoke.initial_velocity = muzzle_dir * smoke_initial_speed
+
+func _apply_camera_shake() -> void:
+	var camera_rig = get_tree().current_scene.get_node_or_null("CameraRig")
+	if camera_rig == null:
+		push_warning("Turret: CameraRig не найден!")
+		return
+
+	# Направление отдачи — противоположное направлению ствола
+	var muzzle_dir: Vector2 = Vector2.UP.rotated(muzzle_point.global_rotation)
+	var recoil_dir: Vector2 = -muzzle_dir
+
+	# Случайная поперечная составляющая для органичности
+	var random_dir: Vector2 = Vector2(randf_range(-1.0, 1.0), randf_range(-1.0, 1.0)).normalized()
+	var shake_dir: Vector2 = recoil_dir.lerp(random_dir, 1.0 - shake_directional_weight).normalized()
+
+	camera_rig.apply_shake(shake_dir, shake_strength)
 
 func _on_sprite_animation_finished() -> void:
 	if sprite.animation == "shoot":
