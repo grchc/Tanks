@@ -141,7 +141,7 @@ texture = ExtResource("2_tv66d")
 [node name="Turret" type="Node2D" parent="." unique_id=88521964]
 scale = Vector2(3, 3)
 script = ExtResource("6_nf4gg")
-max_angular_speed = 1.2
+max_angular_speed = 1.4
 angular_decel = 20.0
 muzzle_flash_scene = ExtResource("7_kvoy7")
 smoke_effect_scene = ExtResource("8_abwyb")
