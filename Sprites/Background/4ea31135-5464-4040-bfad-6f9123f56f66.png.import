@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bu62r08j66mvo"
-path="res://.godot/imported/Turret_animated.png-8b3ff148c46e66ac241558354f22b568.ctex"
+uid="uid://havbfu10x4hd"
+path="res://.godot/imported/4ea31135-5464-4040-bfad-6f9123f56f66.png-507f194fdc94a71b40d48a6d683b659f.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Sprites/MainTank/Turret_animated.png"
-dest_files=["res://.godot/imported/Turret_animated.png-8b3ff148c46e66ac241558354f22b568.ctex"]
+source_file="res://Sprites/Background/4ea31135-5464-4040-bfad-6f9123f56f66.png"
+dest_files=["res://.godot/imported/4ea31135-5464-4040-bfad-6f9123f56f66.png-507f194fdc94a71b40d48a6d683b659f.ctex"]
 
 [params]
 

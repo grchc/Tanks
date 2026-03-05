@@ -7,11 +7,13 @@
 [ext_resource type="Script" uid="uid://8ssntjjg24le" path="res://Scripts/Tank/track.gd" id="4_qhpjb"]
 [ext_resource type="Script" uid="uid://88e3yu331gmj" path="res://Scripts/Tank/turret.gd" id="6_nf4gg"]
 [ext_resource type="PackedScene" uid="uid://gfcab27kqhq0" path="res://Scenes/muzzle_flash.tscn" id="7_kvoy7"]
-[ext_resource type="Texture2D" uid="uid://ded3qw6tydk1i" path="res://Sprites/MainTank/Turret_animated.png" id="7_nf4gg"]
+[ext_resource type="Texture2D" uid="uid://bu62r08j66mvo" path="res://Sprites/MainTank/Turret_animated.png" id="7_nf4gg"]
 [ext_resource type="PackedScene" uid="uid://uvgp87fm7bdr" path="res://Scenes/shot_smoke_effect.tscn" id="8_abwyb"]
+[ext_resource type="PackedScene" uid="uid://d15bx4qb47muq" path="res://Scenes/bullet.tscn" id="9_lmn0b"]
+[ext_resource type="Script" uid="uid://b40up6qj7lqb2" path="res://Scenes/turret_aim_ui.gd" id="10_d3564"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_nf4gg"]
-size = Vector2(59, 74)
+size = Vector2(30, 29.666668)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_eids8"]
 atlas = ExtResource("2_bv1fj")
@@ -98,17 +100,17 @@ animations = [{
 }]
 
 [node name="Tank" type="CharacterBody2D" unique_id=1303356266]
+scale = Vector2(3, 3)
 script = ExtResource("2_eids8")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1742312030]
-position = Vector2(-0.5, 0)
+position = Vector2(0, -1.166666)
 shape = SubResource("RectangleShape2D_nf4gg")
 
 [node name="Tracks" type="Node2D" parent="." unique_id=815766223]
 
 [node name="RightTrack" type="AnimatedSprite2D" parent="Tracks" unique_id=1198080984]
-position = Vector2(-30, -1)
-scale = Vector2(3, 3)
+position = Vector2(-10, -1)
 sprite_frames = SubResource("SpriteFrames_adosd")
 animation = &"move"
 frame = 3
@@ -117,12 +119,9 @@ script = ExtResource("4_qhpjb")
 track_mark_scene = ExtResource("2_t8147")
 
 [node name="TrackPoint" type="Node2D" parent="Tracks/RightTrack" unique_id=229444771]
-position = Vector2(0, 0.37037036)
-scale = Vector2(0.37037036, 0.37037036)
 
 [node name="LeftTrack" type="AnimatedSprite2D" parent="Tracks" unique_id=699059596]
-position = Vector2(30, -1)
-scale = Vector2(3, 3)
+position = Vector2(10, -1)
 sprite_frames = SubResource("SpriteFrames_adosd")
 animation = &"move"
 frame = 3
@@ -132,29 +131,39 @@ script = ExtResource("4_qhpjb")
 track_mark_scene = ExtResource("2_t8147")
 
 [node name="TrackPoint" type="Node2D" parent="Tracks/LeftTrack" unique_id=885561658]
-position = Vector2(0, 0.37037036)
-scale = Vector2(0.37037036, 0.37037036)
 
 [node name="Body" type="Sprite2D" parent="." unique_id=1165396634]
+scale = Vector2(0.33, 0.33)
 texture = ExtResource("2_tv66d")
 
 [node name="Turret" type="Node2D" parent="." unique_id=88521964]
-scale = Vector2(3, 3)
+z_index = 2
 script = ExtResource("6_nf4gg")
 max_angular_speed = 1.4
 angular_decel = 20.0
 muzzle_flash_scene = ExtResource("7_kvoy7")
 smoke_effect_scene = ExtResource("8_abwyb")
-shoot_cooldown = 1.5
+bullet_scene = ExtResource("9_lmn0b")
+shoot_cooldown = 2.5
 shake_strength = 100.0
 shake_directional_weight = 1.0
-recoil_impulse = 200.0
+recoil_impulse = 50.0
+
+[node name="TurretAimUI" type="Node2D" parent="Turret" unique_id=1399451857]
+z_index = 1
+scale = Vector2(0.33333334, 0.33333334)
+script = ExtResource("10_d3564")
+color_aiming = Color(0, 0.86844987, 0.5985521, 1)
+dash_length = 5
+gap_length = 30
+line_width = 4.0
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="Turret" unique_id=1777150677]
-position = Vector2(-9.237064e-15, -8)
+z_index = 2
+position = Vector2(0, -7)
 rotation = 3.1415927
 sprite_frames = SubResource("SpriteFrames_fd0hd")
 animation = &"idle"
 
 [node name="MuzzlePoint" type="Node2D" parent="Turret" unique_id=588109385]
-position = Vector2(0, -21.666666)
+position = Vector2(0, -22.000004)

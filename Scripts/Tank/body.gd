@@ -1,8 +1,8 @@
 extends CharacterBody2D
 
-@export var track_max_speed_forward: float = 250.0
+@export var track_max_speed_forward: float = 200.0
 @export var track_max_speed_reverse: float = 100.0
-@export var track_acceleration: float = 150.0
+@export var track_acceleration: float = 100.0
 @export var braking_deceleration: float = 450.0
 
 @export var track_distance: float = 60.0

@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dwafahr7vdh3g"
-path="res://.godot/imported/City.png-775fbeb309a1a3978fa60724f6f26991.ctex"
+uid="uid://dglu0lib5kjx1"
+path="res://.godot/imported/Shell.png-318f3c0042208ad42f0ff9d74a86f977.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Sprites/Background/City.png"
-dest_files=["res://.godot/imported/City.png-775fbeb309a1a3978fa60724f6f26991.ctex"]
+source_file="res://Sprites/MainTank/Shell.png"
+dest_files=["res://.godot/imported/Shell.png-318f3c0042208ad42f0ff9d74a86f977.ctex"]
 
 [params]
 

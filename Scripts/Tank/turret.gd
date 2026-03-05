@@ -9,6 +9,8 @@ extends Node2D
 
 @export var muzzle_flash_scene: PackedScene
 @export var smoke_effect_scene: PackedScene
+## Сцена снаряда — назначь в инспекторе
+@export var bullet_scene: PackedScene
 
 @export var smoke_initial_speed: float = 80.0
 @export var shoot_cooldown: float = 0.5
@@ -18,8 +20,6 @@ extends Node2D
 @export var shake_directional_weight: float = 0.8
 
 @export_group("Recoil")
-# Сила импульса отдачи в единицах скорости гусениц.
-# При 0 — отдачи нет. При ~50–100 — заметный толчок. При >250 — сдвигает стоячий танк.
 @export var recoil_impulse: float = 60.0
 
 @onready var crosshair: Node2D = get_tree().current_scene.get_node("Crosshair")
@@ -74,10 +74,21 @@ func _shoot() -> void:
 	sprite.play("shoot")
 	_spawn_muzzle_flash()
 	_spawn_smoke()
+	_spawn_bullet()
 	_apply_camera_shake()
 	_apply_recoil()
 
 	get_tree().create_timer(shoot_cooldown).timeout.connect(func(): _can_shoot = true)
+
+func _spawn_bullet() -> void:
+	if bullet_scene == null:
+		push_warning("Turret: bullet_scene не назначен!")
+		return
+
+	var bullet = bullet_scene.instantiate()
+	get_tree().current_scene.add_child(bullet)
+	bullet.global_position = muzzle_point.global_position
+	bullet.init(muzzle_point.global_rotation)
 
 func _spawn_muzzle_flash() -> void:
 	if muzzle_flash_scene == null:
@@ -124,7 +135,6 @@ func _apply_recoil() -> void:
 		push_warning("Turret: тело танка не имеет метода apply_recoil!")
 		return
 
-	# Направление выстрела — вперёд из дула в мировых координатах
 	var shot_dir: Vector2 = Vector2.UP.rotated(muzzle_point.global_rotation)
 	body.apply_recoil(shot_dir, recoil_impulse)
 
