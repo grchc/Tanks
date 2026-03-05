@@ -101,6 +101,7 @@ animations = [{
 
 [node name="Tank" type="CharacterBody2D" unique_id=1303356266]
 scale = Vector2(3, 3)
+collision_layer = 2
 script = ExtResource("2_eids8")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1742312030]
@@ -156,7 +157,7 @@ recoil_impulse = 50.0
 z_index = 1
 scale = Vector2(0.33333334, 0.33333334)
 script = ExtResource("10_d3564")
-color_aiming = Color(0, 0.86844987, 0.5985521, 1)
+color_aiming = Color(0, 0.7176471, 0.9372549, 1)
 dash_length = 5
 gap_length = 30
 line_width = 4.0

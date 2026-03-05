@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://cngdou76smopn"]
 
 [ext_resource type="Script" uid="uid://c88g3hp6y3cgc" path="res://Scripts/world.gd" id="1_gjpho"]
-[ext_resource type="Texture2D" uid="uid://havbfu10x4hd" path="res://Sprites/Background/4ea31135-5464-4040-bfad-6f9123f56f66.png" id="2_45d1s"]
+[ext_resource type="Texture2D" uid="uid://dwla1oqp43p6b" path="res://Sprites/Background/Default.png" id="2_45d1s"]
 [ext_resource type="PackedScene" uid="uid://047bclugwlmj" path="res://Scenes/Tank.tscn" id="2_bcbcq"]
 [ext_resource type="Texture2D" uid="uid://dvt02xwbbaod5" path="res://Sprites/MainTank/Aim.png" id="4_p70al"]
 [ext_resource type="Script" uid="uid://de0rtxg2art3a" path="res://Scripts/crosshair.gd" id="5_y7y61"]
@@ -46,7 +46,7 @@ z_index = -10
 z_as_relative = false
 texture_repeat = 2
 position = Vector2(765.00006, 435)
-scale = Vector2(2, 2)
+scale = Vector2(4.1, 4.1)
 texture = ExtResource("2_45d1s")
 
 [node name="TrackMarks" type="Node2D" parent="." unique_id=539108097]
@@ -56,6 +56,7 @@ position = Vector2(765, 371)
 wall_friction = 0.05
 
 [node name="Crosshair" type="Node2D" parent="." unique_id=1760651807]
+scale = Vector2(2, 2)
 script = ExtResource("5_y7y61")
 
 [node name="Sprite2D" type="Sprite2D" parent="Crosshair" unique_id=415003454]

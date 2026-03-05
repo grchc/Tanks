@@ -1,101 +1,68 @@
 ## bullet_trail.gd
-## Attach to the Bullet (Area2D) directly — no child node needed.
-## Creates a Line2D at scene root that follows the bullet in world space.
+## Attach to a Node2D named "BulletTrail", child of the bullet scene root.
 
-extends Area2D
+extends Node2D
 
-# ── re-export bullet params (keep in one script) ─────────────────────────────
-@export var speed: float = 800.0
-@export var lifetime: float = 3.0
+@export var max_points: int = 18
+@export var sample_distance: float = 4.0
+@export var trail_width: float = 2.0
+@export var color_tip: Color = Color(1.0, 0.95, 0.7, 1.0)
+@export var color_tail: Color = Color(0.8, 0.5, 0.15, 0.0)
+@export var fade_speed: float = 3.5
 
-@export_group("Trail")
-@export var max_points: int = 24
-@export var width_head: float = 2.0
-@export var width_tail: float = 1.0
-@export var trail_color: Color = Color(1.0, 1.0, 1.0, 1.0)
-@export var fade_out_duration: float = 0.18
-
-# ── internal ──────────────────────────────────────────────────────────────────
-var _velocity: Vector2 = Vector2.ZERO
-var _age: float = 0.0
-var _initialized: bool = false
-
-var _line: Line2D = null
-
-func _ready() -> void:
-	body_entered.connect(_on_hit)
-	area_entered.connect(_on_area_hit)
-	_create_line()
-
-func init(muzzle_global_rotation: float) -> void:
-	_velocity = Vector2.UP.rotated(muzzle_global_rotation) * speed
-	_initialized = true
+var _points: Array[Vector2] = []
+var _fading: bool = false
+var _fade_alpha: float = 1.0
 
 func _physics_process(delta: float) -> void:
-	if not _initialized:
+	if _fading:
+		_fade_alpha -= fade_speed * delta
+		if _fade_alpha <= 0.0:
+			queue_free()
+			return
+		queue_redraw()
 		return
-	position += _velocity * delta
-	_age += delta
-	if _age >= lifetime:
-		_destroy()
+
+	var snapped_pos := Vector2(roundi(global_position.x), roundi(global_position.y))
+
+	if _points.is_empty() or snapped_pos.distance_to(_points[-1]) >= sample_distance:
+		_points.append(snapped_pos)
+		if _points.size() > max_points:
+			_points.remove_at(0)
+		queue_redraw()
+
+func _draw() -> void:
+	var n := _points.size()
+	if n < 2:
 		return
-	_update_line()
 
-func _create_line() -> void:
-	_line = Line2D.new()
-	_line.width = width_head
-	_line.default_color = trail_color
-	_line.joint_mode = Line2D.LINE_JOINT_SHARP
-	_line.begin_cap_mode = Line2D.LINE_CAP_ROUND
-	_line.end_cap_mode = Line2D.LINE_CAP_ROUND
+	var radius: float = trail_width * 0.5
 
-	# Width gradient: thick at head (newest = last point), thin at tail
-	var grad := Gradient.new()
-	grad.set_color(0, Color(trail_color.r, trail_color.g, trail_color.b, 0.0))
-	grad.set_color(1, trail_color)
-	_line.width_curve = _make_width_curve()
-	_line.gradient = grad
+	# Все сегменты с градиентом
+	for i in range(n - 1):
+		var t := (float(i) + 0.5) / float(n - 1)
+		var c := color_tip.lerp(color_tail, 1.0 - t)
+		c.a *= _fade_alpha
+		draw_line(to_local(_points[i]), to_local(_points[i + 1]), c, trail_width, false)
 
-	# Add directly to scene root so it lives in world space
-	get_tree().current_scene.add_child(_line)
+	# Круг только на хвосте (points[0]) — скругляет тупой конец.
+	# Рисуется только после отсоединения от пули, пока пуля жива —
+	# хвост и так уходит в прозрачность через color_tail.
+	if _fading:
+		var tip_color := color_tip
+		tip_color.a *= _fade_alpha
+		draw_circle(to_local(_points[-1]), radius, tip_color)
 
-func _make_width_curve() -> Curve:
-	var c := Curve.new()
-	c.add_point(Vector2(0.0, width_tail / width_head))
-	c.add_point(Vector2(1.0, 1.0))
-	return c
-
-func _update_line() -> void:
-	if _line == null:
+func detach_and_fade() -> void:
+	if _fading:
 		return
-	# Add current world position snapped to pixel grid
-	_line.add_point(global_position.round())
-	# Trim oldest points
-	while _line.get_point_count() > max_points:
-		_line.remove_point(0)
+	_fading = true
 
-func _on_hit(_body: Node) -> void:
-	_destroy()
+	var root := get_tree().current_scene
+	var saved_global_pos := global_position
+	var saved_global_rot := global_rotation
 
-func _on_area_hit(_area: Area2D) -> void:
-	_destroy()
+	reparent(root, true)
 
-func _destroy() -> void:
-	if _line != null:
-		_fade_and_free_line()
-	queue_free()
-
-func _fade_and_free_line() -> void:
-	var line := _line
-	_line = null
-	var tween := get_tree().create_tween()
-	tween.tween_method(
-		func(a: float) -> void:
-			if is_instance_valid(line):
-				line.modulate.a = a,
-		1.0, 0.0, fade_out_duration
-	)
-	tween.tween_callback(func() -> void:
-		if is_instance_valid(line):
-			line.queue_free()
-	)
+	global_position = saved_global_pos
+	global_rotation = saved_global_rot

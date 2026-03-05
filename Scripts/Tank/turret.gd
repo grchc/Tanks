@@ -29,6 +29,18 @@ extends Node2D
 var _relative_speed: float = 0.0
 var _can_shoot: bool = true
 
+## Таймер-нода для cooldown — безопаснее, чем create_timer(),
+## т.к. не вызовется после удаления башни.
+@onready var _cooldown_timer: Timer = _make_cooldown_timer()
+
+func _make_cooldown_timer() -> Timer:
+	var t := Timer.new()
+	t.one_shot = true
+	t.wait_time = shoot_cooldown
+	t.timeout.connect(func(): _can_shoot = true)
+	add_child(t)
+	return t
+
 func _ready() -> void:
 	sprite.animation_finished.connect(_on_sprite_animation_finished)
 
@@ -78,14 +90,19 @@ func _shoot() -> void:
 	_apply_camera_shake()
 	_apply_recoil()
 
-	get_tree().create_timer(shoot_cooldown).timeout.connect(func(): _can_shoot = true)
+	_cooldown_timer.wait_time = shoot_cooldown
+	_cooldown_timer.start()
 
 func _spawn_bullet() -> void:
 	if bullet_scene == null:
 		push_warning("Turret: bullet_scene не назначен!")
 		return
 
-	var bullet = bullet_scene.instantiate()
+	var bullet := bullet_scene.instantiate()
+
+	# Устанавливаем позицию и направление ДО добавления в дерево,
+	# чтобы _ready() пули видел корректные данные.
+	# global_position работает только после add_child, поэтому:
 	get_tree().current_scene.add_child(bullet)
 	bullet.global_position = muzzle_point.global_position
 	bullet.init(muzzle_point.global_rotation)

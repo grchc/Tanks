@@ -71,7 +71,7 @@ animations = [{
 }],
 "loop": true,
 "name": &"smoke",
-"speed": 5.0
+"speed": 8.0
 }]
 
 [node name="ShotSmokeEffect" type="Node2D" unique_id=2134303623]

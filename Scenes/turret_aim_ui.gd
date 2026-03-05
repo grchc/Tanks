@@ -8,7 +8,7 @@
 extends Node2D
 
 @export_group("Colors")
-@export var color_aiming: Color = Color(1.0, 0.65, 0.0, 1.0)
+@export var color_aiming: Color = Color(0.0, 0.718, 0.937, 1.0)
 @export var color_locked: Color = Color(1.0, 1.0, 1.0, 1.0)
 
 @export_group("Line style")
