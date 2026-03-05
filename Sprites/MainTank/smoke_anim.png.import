@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dhwq27g7v8sjf"
-path="res://.godot/imported/shot_smoke_anim - Copy.png-f85f5ac1bac942e211d68da15bedd0b6.ctex"
+uid="uid://b2kwfsmq78sah"
+path="res://.godot/imported/smoke_anim.png-81f36fcc6fc14cca6e4384ed278aa66c.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Sprites/MainTank/shot_smoke_anim - Copy.png"
-dest_files=["res://.godot/imported/shot_smoke_anim - Copy.png-f85f5ac1bac942e211d68da15bedd0b6.ctex"]
+source_file="res://Sprites/MainTank/smoke_anim.png"
+dest_files=["res://.godot/imported/smoke_anim.png-81f36fcc6fc14cca6e4384ed278aa66c.ctex"]
 
 [params]
 

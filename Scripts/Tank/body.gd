@@ -6,7 +6,7 @@ extends CharacterBody2D
 @export var braking_deceleration: float = 450.0
 
 @export var track_distance: float = 60.0
-@export var max_track_diff: float = 0.6
+@export var max_track_diff: float = 0.3
 @export var pivot_turn_speed: float = 50.0
 
 # Коэффициент трения о стену (0 = нет трения, 1 = полная остановка при боковом касании)

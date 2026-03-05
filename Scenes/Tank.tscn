@@ -108,6 +108,7 @@ position = Vector2(0, -1.166666)
 shape = SubResource("RectangleShape2D_nf4gg")
 
 [node name="Tracks" type="Node2D" parent="." unique_id=815766223]
+position = Vector2(0, 0.33333334)
 
 [node name="RightTrack" type="AnimatedSprite2D" parent="Tracks" unique_id=1198080984]
 position = Vector2(-10, -1)
@@ -133,10 +134,12 @@ track_mark_scene = ExtResource("2_t8147")
 [node name="TrackPoint" type="Node2D" parent="Tracks/LeftTrack" unique_id=885561658]
 
 [node name="Body" type="Sprite2D" parent="." unique_id=1165396634]
-scale = Vector2(0.33, 0.33)
+modulate = Color(1.353256, 1.353256, 1.353256, 1)
+rotation = 3.1415927
 texture = ExtResource("2_tv66d")
 
 [node name="Turret" type="Node2D" parent="." unique_id=88521964]
+modulate = Color(1.8247963, 1.8247963, 1.8247963, 1)
 z_index = 2
 script = ExtResource("6_nf4gg")
 max_angular_speed = 1.4
